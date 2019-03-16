@@ -1,1 +1,0 @@
-# stackelberg-game-leader
