@@ -64,7 +64,7 @@ final class OurLeader
 	 */
 	private float genPrice(final float p_mean, final float p_diversity)
 	{
-		return 1.0f;
+		return 1.6f;
 	}
 
 	private List<Record> getData() throws RemoteException{
@@ -97,19 +97,6 @@ final class OurLeader
 		public void run()
 		{
 			System.exit(0);
-		}
-	}
-
-	private static class Model {
-		private double a;
-		private double b;
-
-		public void train(List<Record> records) {
-
-		}
-
-		public double predict(double u) {
-			return a + b * u;
 		}
 	}
 }
