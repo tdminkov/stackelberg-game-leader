@@ -12,7 +12,13 @@ public class Model {
     // sum of squared leader price * sum of follower reaction
     // - sum of leader price * sum of (leader price * follower reaction)
     // / number of data points * sum of squared leader price - sum of leader price squared
-    
+    float sum_squared_leader = 0f;
+    float sum_leader = 0f;
+    float sum_leader_times_follower = 0f;
+    float sum_follower = 0f;
+    for (Record record : records) {
+      sum_squared_leader +=
+    }
 
 
     // b
