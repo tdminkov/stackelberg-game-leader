@@ -17,7 +17,6 @@ public class Model {
     float sum_leader_times_follower = 0f;
     float sum_follower = 0f;
     for (Record record : records) {
-      sum_squared_leader +=
     }
 
 

@@ -9,8 +9,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-final class OurLeader
-	extends PlayerImpl
+final class OurLeader extends PlayerImpl
 {
 
 	private List<Record> data;
@@ -18,22 +17,19 @@ final class OurLeader
 	// R(u_l) = a + b(u_l)
 	private Model reaction;
 
-	private OurLeader()
-		throws RemoteException, NotBoundException
+	private OurLeader()	throws RemoteException, NotBoundException
 	{
 		super(PlayerType.LEADER, "Our Leader");
 	}
 
 	@Override
-	public void goodbye()
-		throws RemoteException
+	public void goodbye() throws RemoteException
 	{
 		ExitTask.exit(500);
 	}
 
 	@Override
-	public void startSimulation(int p_steps)
-		throws RemoteException
+	public void startSimulation(int p_steps) throws RemoteException
 	{
 		data = getData();
 		for(Record record : data) {
@@ -49,8 +45,7 @@ final class OurLeader
 	 * @throws RemoteException
 	 */
 	@Override
-	public void proceedNewDay(int p_date)
-		throws RemoteException
+	public void proceedNewDay(int p_date) throws RemoteException
 	{
 		m_platformStub.publishPrice(m_type, genPrice(1.8f, 0.05f));
 	}
