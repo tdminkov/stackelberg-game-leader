@@ -17,9 +17,12 @@ final class OurLeader extends PlayerImpl
 	// R(u_l) = a + b(u_l)
 	private Model reaction;
 
+	private Solver solver;
+
 	private OurLeader()	throws RemoteException, NotBoundException
 	{
 		super(PlayerType.LEADER, "Our Leader");
+		solver = new LinearRegressionSolver();
 	}
 
 	@Override
@@ -47,7 +50,13 @@ final class OurLeader extends PlayerImpl
 	@Override
 	public void proceedNewDay(int p_date) throws RemoteException
 	{
-		m_platformStub.publishPrice(m_type, genPrice(1.8f, 0.05f));
+		// Calculate our price
+		float u_l = solver.maximize(reaction);
+
+		// Send calculated price
+		m_platformStub.publishPrice(m_type, u_l);
+
+		// Update our model
 	}
 
 	/**

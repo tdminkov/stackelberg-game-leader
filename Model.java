@@ -3,8 +3,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Model {
-  private double a;
-  private double b;
+  private float a;
+  private float b;
+
+  public Model() {
+    a = 1.0f;
+    b = 1.0f;
+  }
+
+  public float getA() {
+    return a;
+  }
+
+  public float getB() {
+    return b;
+  }
 
   public void train(List<Record> records) {
     //TODO
@@ -17,6 +30,15 @@ public class Model {
     float sum_leader_times_follower = 0f;
     float sum_follower = 0f;
     for (Record record : records) {
+      /*
+      // The date of the record
+    	public final int m_date;
+    	// The price of the leader
+    	public final float m_leaderPrice;
+    	// The price of the follower
+    	public final float m_followerPrice;
+      // The cost of the follower
+    	public final float m_cost; */
     }
 
 
@@ -28,7 +50,7 @@ public class Model {
 
   }
 
-  public double predict(double u) {
+  public float predict(float u) {
     return a + b * u;
   }
 }
