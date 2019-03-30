@@ -19,7 +19,7 @@ public class Model {
     return b;
   }
 
-  public void train(List<Record> records) {
+  public void train(List<com.sun.prism.impl.Disposer.Record> records) {
     //TODO
     // a
     // sum of squared leader price * sum of follower reaction
@@ -52,10 +52,12 @@ public class Model {
     }
 
     a = sum_squared_leader * sum_follower
-    - sum_leader * sum_leader_times_follower
-    / (records.size() * sum_squared_leader - (sum_leader*sum_leader))
+    		- sum_leader * sum_leader_times_follower
+    		/ (records.size() * sum_squared_leader - (sum_leader*sum_leader));
 
-    b = records.size() * sum of (leader price * follower reaction)
+    b = records.size() * sum_leader_times_follower
+    		- sum_leader * sum_follower
+    		/ (records.size() * sum_squared_leader - (sum_leader * sum_leader));
     // - sum of leader price * sum of follower reaction
     // / number of data points * sum of squared leader price - sum of leader price squared
 
