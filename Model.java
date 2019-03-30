@@ -5,10 +5,11 @@ import java.util.List;
 public class Model {
   private float a;
   private float b;
-
+  private int windowSize;
   public Model() {
     a = 1.0f;
     b = 1.0f;
+    windowSize = 50;
   }
 
   public float getA() {
@@ -34,7 +35,8 @@ public class Model {
     float sum_leader = 0f;
     float sum_leader_times_follower = 0f;
     float sum_follower = 0f;
-    for (Record record : records) {
+    for (int i = records.size() - windowSize; i < records.size(); i++) {
+      Record record = records.get(i);
       /*
       // The date of the record
     	public final int m_date;
@@ -57,11 +59,11 @@ public class Model {
     System.out.println("Record count: " + records.size());
     a = (sum_squared_leader * sum_follower
     		- sum_leader * sum_leader_times_follower)
-    		/ (records.size() * sum_squared_leader - (sum_leader*sum_leader));
+    		/ (windowSize * sum_squared_leader - (sum_leader*sum_leader));
 
-    b = (records.size() * sum_leader_times_follower
+    b = (windowSize * sum_leader_times_follower
     		- sum_leader * sum_follower)
-    		/ (records.size() * sum_squared_leader - (sum_leader * sum_leader));
+    		/ (windowSize * sum_squared_leader - (sum_leader * sum_leader));
     // - sum of leader price * sum of follower reaction
     // / number of data points * sum of squared leader price - sum of leader price squared
 

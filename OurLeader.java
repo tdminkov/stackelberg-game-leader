@@ -34,12 +34,11 @@ final class OurLeader extends PlayerImpl
 	@Override
 	public void startSimulation(int p_steps) throws RemoteException
 	{
-		data = getData();
+		data = getData(100);
 		for(Record record : data) {
 			System.out.println(String.format("Record %d :: Leader: %f, Follower: %f", record.m_date, record.m_leaderPrice, record.m_followerPrice));
 		}
 		reaction = new Model();
-		reaction.train(data);
 	}
 
 	/**
@@ -50,13 +49,15 @@ final class OurLeader extends PlayerImpl
 	@Override
 	public void proceedNewDay(int p_date) throws RemoteException
 	{
+		data = getData(p_date);
+		reaction.train(data);
 		// Calculate our price
 		float u_l = solver.maximize(reaction);
 
 		// Send calculated price
 		m_platformStub.publishPrice(m_type, u_l);
 
-		// Update our model
+		// TODO:Update our model
 	}
 
 	/**
@@ -71,9 +72,9 @@ final class OurLeader extends PlayerImpl
 		return 1.6f;
 	}
 
-	private List<Record> getData() throws RemoteException{
+	private List<Record> getData(int endDate) throws RemoteException{
 		List<Record> records = new ArrayList<>();
-		for (int date = 1; date <= 100; date++) {
+		for (int date = 1; date <= endDate; date++) {
 			records.add(m_platformStub.query(PlayerType.LEADER, date));
 		}
 		return records;
