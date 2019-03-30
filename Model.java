@@ -50,13 +50,17 @@ public class Model {
       sum_follower += record.m_followerPrice;
       sum_leader_times_follower += record.m_leaderPrice * record.m_followerPrice;
     }
-
-    a = sum_squared_leader * sum_follower
-    		- sum_leader * sum_leader_times_follower
+    System.out.println("Sum Leader: " + sum_leader);
+    System.out.println("Sum Squared Leader: " + sum_squared_leader);
+    System.out.println("Sum Leader Times Follower: " + sum_leader_times_follower);
+    System.out.println("Sum Follower: " + sum_follower);
+    System.out.println("Record count: " + records.size());
+    a = (sum_squared_leader * sum_follower
+    		- sum_leader * sum_leader_times_follower)
     		/ (records.size() * sum_squared_leader - (sum_leader*sum_leader));
 
-    b = records.size() * sum_leader_times_follower
-    		- sum_leader * sum_follower
+    b = (records.size() * sum_leader_times_follower
+    		- sum_leader * sum_follower)
     		/ (records.size() * sum_squared_leader - (sum_leader * sum_leader));
     // - sum of leader price * sum of follower reaction
     // / number of data points * sum of squared leader price - sum of leader price squared
