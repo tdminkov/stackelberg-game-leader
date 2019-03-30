@@ -19,7 +19,7 @@ public class Model {
     return b;
   }
 
-  public void train(List<com.sun.prism.impl.Disposer.Record> records) {
+  public void train(List<Record> records) {
     //TODO
     // a
     // sum of squared leader price * sum of follower reaction
