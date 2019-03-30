@@ -35,10 +35,10 @@ final class OurLeader extends PlayerImpl
 	public void startSimulation(int p_steps) throws RemoteException
 	{
 		data = getData(100);
-		for(Record record : data) {
-			System.out.println(String.format("Record %d :: Leader: %f, Follower: %f", record.m_date, record.m_leaderPrice, record.m_followerPrice));
-		}
-		reaction = new Model();
+		// for(Record record : data) {
+		// 	System.out.println(String.format("Record %d :: Leader: %f, Follower: %f", record.m_date, record.m_leaderPrice, record.m_followerPrice));
+		// }
+		reaction = new ForgettingModel();
 	}
 
 	/**
@@ -50,7 +50,14 @@ final class OurLeader extends PlayerImpl
 	public void proceedNewDay(int p_date) throws RemoteException
 	{
 		data = getData(p_date);
+		Record record = data.get(data.size() - 1);
+		System.out.println(String.format("Leader: %f, Follower: %f, Predicted: %f\n", record.m_leaderPrice, record.m_followerPrice, reaction.predict(record.m_leaderPrice)));
+		// float profit = (recent.m_leaderPrice - recent.m_cost) * (2 - recent.m_leaderPrice + 0.3f * recent.m_followerPrice);
+		// System.out.println(String.format("Profit: %f", profit));
 		reaction.train(data);
+		// for(Record record : data) {
+		// 	System.out.println(String.format("Leader: %f, Follower: %f, Predicted: %f\n", record.m_leaderPrice, record.m_followerPrice, reaction.predict(record.m_leaderPrice)));
+		// }
 		// Calculate our price
 		float u_l = solver.maximize(reaction);
 
@@ -74,7 +81,7 @@ final class OurLeader extends PlayerImpl
 
 	private List<Record> getData(int endDate) throws RemoteException{
 		List<Record> records = new ArrayList<>();
-		for (int date = 1; date <= endDate; date++) {
+		for (int date = 1; date < endDate; date++) {
 			records.add(m_platformStub.query(PlayerType.LEADER, date));
 		}
 		return records;
