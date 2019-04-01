@@ -12,7 +12,7 @@ public class ForgettingModel implements Model{
     a = 1.0f;
     b = 1.0f;
     lambda = 0.97f;
-    windowSize = 50;
+    windowSize = 20;
   }
 
   @Override
@@ -56,10 +56,10 @@ public class ForgettingModel implements Model{
       float forgettingFactor = (float) Math.pow(lambda, windowSize - i);
 
       sum_lambda += forgettingFactor;
-      sum_leader += forgettingFactor * record.m_leaderPrice;
-      sum_squared_leader += forgettingFactor * record.m_leaderPrice * record.m_leaderPrice;
-      sum_follower += forgettingFactor * record.m_followerPrice;
-      sum_leader_times_follower += forgettingFactor * record.m_leaderPrice * record.m_followerPrice;
+      sum_leader += forgettingFactor * record.m_leaderPrice; // sum(x(t))
+      sum_squared_leader += forgettingFactor * record.m_leaderPrice * record.m_leaderPrice; // sum(x(t)^2)
+      sum_follower += forgettingFactor * record.m_followerPrice; // sum(y(t))
+      sum_leader_times_follower += forgettingFactor * record.m_leaderPrice * record.m_followerPrice; // sum(x(t)y(t))
     }
     // System.out.println("Sum Leader: " + sum_leader);
     // System.out.println("Sum Squared Leader: " + sum_squared_leader);
