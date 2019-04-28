@@ -1,11 +1,7 @@
-import comp34120.ex2.PlayerImpl;
-import comp34120.ex2.PlayerType;
-import comp34120.ex2.Record;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -80,7 +76,7 @@ final class OurLeader extends PlayerImpl
 	}
 
 	private List<Record> getData(int endDate) throws RemoteException{
-		List<Record> records = new ArrayList<>();
+		List<Record> records = new ArrayList<Record>();
 		for (int date = 1; date < endDate; date++) {
 			records.add(m_platformStub.query(PlayerType.LEADER, date));
 		}

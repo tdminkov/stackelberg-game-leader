@@ -1,5 +1,3 @@
-import comp34120.ex2.Record;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleModel implements Model{

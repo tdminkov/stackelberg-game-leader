@@ -1,4 +1,3 @@
-import comp34120.ex2.Record;
 import java.util.List;
 public interface Model{
 

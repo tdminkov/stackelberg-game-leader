@@ -1,5 +1,3 @@
-package comp34120.ex2;
-
 /**
  * The types of the players
  * @author Xin
