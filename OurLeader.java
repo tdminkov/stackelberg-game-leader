@@ -22,7 +22,7 @@ final class OurLeader extends PlayerImpl
 	private OurLeader()	throws RemoteException, NotBoundException
 	{
 		super(PlayerType.LEADER, "Our Leader");
-		solver = new LinearRegressionSolver();
+		solver = new BruteForceSolver();
 	}
 
 	@Override
@@ -34,9 +34,9 @@ final class OurLeader extends PlayerImpl
 	@Override
 	public void startSimulation(int p_steps) throws RemoteException
 	{
-		data = getData(100);
+		// data = getData(100);
 		// for(Record record : data) {
-		// 	System.out.println(String.format("Record %d :: Leader: %f, Follower: %f", record.m_date, record.m_leaderPrice, record.m_followerPrice));
+		// 	System.out.println(String.format("%f,%f", record.m_leaderPrice, record.m_followerPrice));
 		// }
 		reaction = new ForgettingModel();
 	}
@@ -50,10 +50,10 @@ final class OurLeader extends PlayerImpl
 	public void proceedNewDay(int p_date) throws RemoteException
 	{
 		data = getData(p_date);
-		Record record = data.get(data.size() - 1);
-		System.out.println(String.format("Leader: %f, Follower: %f, Predicted: %f\n", record.m_leaderPrice, record.m_followerPrice, reaction.predict(record.m_leaderPrice)));
+		// Record record = data.get(data.size() - 1);
+		// System.out.println(String.format("%f,%f", record.m_leaderPrice, record.m_followerPrice));
 		// float profit = (recent.m_leaderPrice - recent.m_cost) * (2 - recent.m_leaderPrice + 0.3f * recent.m_followerPrice);
-		// System.out.println(String.format("Profit: %f", profit));
+		// System.out.println(Stringtat.format("Profit: %f", profit));
 		reaction.train(data);
 		// for(Record record : data) {
 		// 	System.out.println(String.format("Leader: %f, Follower: %f, Predicted: %f\n", record.m_leaderPrice, record.m_followerPrice, reaction.predict(record.m_leaderPrice)));
@@ -64,7 +64,14 @@ final class OurLeader extends PlayerImpl
 		// Send calculated price
 		m_platformStub.publishPrice(m_type, u_l);
 
-		// TODO:Update our model
+		if(p_date == 129) {
+			data = getData(100, 129);
+			float totalProfit = 0f;
+			for(Record record : data) {
+				totalProfit += (record.m_leaderPrice - 1.0f) * (2f - record.m_leaderPrice + 0.3*record.m_followerPrice);
+			}
+			System.out.println("Total Profit: " + totalProfit);
+		}
 	}
 
 	/**
@@ -82,6 +89,14 @@ final class OurLeader extends PlayerImpl
 	private List<Record> getData(int endDate) throws RemoteException{
 		List<Record> records = new ArrayList<>();
 		for (int date = 1; date < endDate; date++) {
+			records.add(m_platformStub.query(PlayerType.LEADER, date));
+		}
+		return records;
+	}
+
+	private List<Record> getData(int startDate, int endDate) throws RemoteException{
+		List<Record> records = new ArrayList<>();
+		for (int date = startDate; date < endDate; date++) {
 			records.add(m_platformStub.query(PlayerType.LEADER, date));
 		}
 		return records;

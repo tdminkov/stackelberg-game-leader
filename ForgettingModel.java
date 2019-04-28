@@ -12,7 +12,7 @@ public class ForgettingModel implements Model{
     a = 1.0f;
     b = 1.0f;
     lambda = 0.97f;
-    windowSize = 20;
+    windowSize = 16;
   }
 
   @Override
