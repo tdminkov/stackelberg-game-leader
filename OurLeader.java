@@ -9,8 +9,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-final class OurLeader
-	extends PlayerImpl
+final class OurLeader extends PlayerImpl
 {
 
 	private List<Record> data;
@@ -18,29 +17,28 @@ final class OurLeader
 	// R(u_l) = a + b(u_l)
 	private Model reaction;
 
-	private OurLeader()
-		throws RemoteException, NotBoundException
+	private Solver solver;
+
+	private OurLeader()	throws RemoteException, NotBoundException
 	{
 		super(PlayerType.LEADER, "Our Leader");
+		solver = new LinearRegressionSolver();
 	}
 
 	@Override
-	public void goodbye()
-		throws RemoteException
+	public void goodbye() throws RemoteException
 	{
 		ExitTask.exit(500);
 	}
 
 	@Override
-	public void startSimulation(int p_steps)
-		throws RemoteException
+	public void startSimulation(int p_steps) throws RemoteException
 	{
-		data = getData();
-		for(Record record : data) {
-			System.out.println(String.format("Record %d :: Leader: %f, Follower: %f", record.m_date, record.m_leaderPrice, record.m_followerPrice));
-		}
-		reaction = new Model();
-		reaction.train(data);
+		data = getData(100);
+		// for(Record record : data) {
+		// 	System.out.println(String.format("Record %d :: Leader: %f, Follower: %f", record.m_date, record.m_leaderPrice, record.m_followerPrice));
+		// }
+		reaction = new ForgettingModel();
 	}
 
 	/**
@@ -49,10 +47,24 @@ final class OurLeader
 	 * @throws RemoteException
 	 */
 	@Override
-	public void proceedNewDay(int p_date)
-		throws RemoteException
+	public void proceedNewDay(int p_date) throws RemoteException
 	{
-		m_platformStub.publishPrice(m_type, genPrice(1.8f, 0.05f));
+		data = getData(p_date);
+		Record record = data.get(data.size() - 1);
+		System.out.println(String.format("Leader: %f, Follower: %f, Predicted: %f\n", record.m_leaderPrice, record.m_followerPrice, reaction.predict(record.m_leaderPrice)));
+		// float profit = (recent.m_leaderPrice - recent.m_cost) * (2 - recent.m_leaderPrice + 0.3f * recent.m_followerPrice);
+		// System.out.println(String.format("Profit: %f", profit));
+		reaction.train(data);
+		// for(Record record : data) {
+		// 	System.out.println(String.format("Leader: %f, Follower: %f, Predicted: %f\n", record.m_leaderPrice, record.m_followerPrice, reaction.predict(record.m_leaderPrice)));
+		// }
+		// Calculate our price
+		float u_l = solver.maximize(reaction);
+
+		// Send calculated price
+		m_platformStub.publishPrice(m_type, u_l);
+
+		// TODO:Update our model
 	}
 
 	/**
@@ -64,12 +76,12 @@ final class OurLeader
 	 */
 	private float genPrice(final float p_mean, final float p_diversity)
 	{
-		return 1.0f;
+		return 1.6f;
 	}
 
-	private List<Record> getData() throws RemoteException{
+	private List<Record> getData(int endDate) throws RemoteException{
 		List<Record> records = new ArrayList<>();
-		for (int date = 1; date <= 100; date++) {
+		for (int date = 1; date < endDate; date++) {
 			records.add(m_platformStub.query(PlayerType.LEADER, date));
 		}
 		return records;
@@ -97,19 +109,6 @@ final class OurLeader
 		public void run()
 		{
 			System.exit(0);
-		}
-	}
-
-	private static class Model {
-		private double a;
-		private double b;
-
-		public void train(List<Record> records) {
-
-		}
-
-		public double predict(double u) {
-			return a + b * u;
 		}
 	}
 }
