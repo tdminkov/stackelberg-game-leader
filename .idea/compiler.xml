@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="stackelberg-game-leader" target="1.5" />
+      <module name="stackelberg-game-leader" target="6" />
     </bytecodeTargetLevel>
   </component>
 </project>
